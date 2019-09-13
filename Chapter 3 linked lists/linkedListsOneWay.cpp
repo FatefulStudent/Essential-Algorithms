@@ -50,6 +50,5 @@ LinkedList::~LinkedList()
 int main()
 {
     IntegerCell *x = new IntegerCell(1);
-    cout << x << endl;
-    cout << "Hello World!" << endl;
+    cout << (*x).value << endl;
 }
