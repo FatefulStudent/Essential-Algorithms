@@ -34,3 +34,5 @@
 # Misc
 *.pdb
 *.ilk
+*.json
+test.cpp
