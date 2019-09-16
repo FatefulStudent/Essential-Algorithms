@@ -69,11 +69,28 @@ void selection_sort(int* array, size_t size)
     }
 }
 
-
+void bubble_sort(int* array, size_t size)
+{
+    bool is_sorted = false;
+    while (!is_sorted)
+    {
+        is_sorted = true;
+        for (size_t i = 0; i < size-1; i++)
+        {
+            if (array[i] > array[i+1])
+            {
+                is_sorted = false;
+                std::swap(array[i], array[i+1]);
+            }
+        }
+    }
+    
+        
+}
 
 int main()
 {
-    size_t array_size = 7; 
+    size_t array_size = 17; 
     int * array_to_sort1 = new int[array_size];
     int * array_to_sort_orig = new int[array_size];
     for (size_t i = 0; i < array_size; i++)
@@ -83,7 +100,7 @@ int main()
         array_to_sort_orig[i] = rand_num;
     }
     print_array(array_to_sort1, array_size);
-    selection_sort(array_to_sort1, array_size);
+    bubble_sort(array_to_sort1, array_size);
     print_array(array_to_sort1, array_size);
 
     std::sort(array_to_sort_orig, array_to_sort_orig+array_size);
