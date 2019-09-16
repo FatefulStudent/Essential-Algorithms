@@ -24,7 +24,8 @@ int find_min_index(int * start_ptr, int * end_ptr, bool first_min)
         {
             min_element = *i;
             min_index = index_counter;
-            break;
+            if (first_min)
+                break;
         }
     }
 
@@ -56,7 +57,16 @@ void insertion_sort(int* array, size_t size)
 
 void selection_sort(int* array, size_t size)
 {
+    int min_index = 0;
 
+    for (size_t i = 0; i < size; i++)
+    {
+        min_index = find_min_index(array + i, array + size, false);
+        if (min_index)
+        {
+            std::swap(array[i], array[i+min_index]);// swapping the elements
+        }
+    }
 }
 
 
@@ -73,7 +83,7 @@ int main()
         array_to_sort_orig[i] = rand_num;
     }
     print_array(array_to_sort1, array_size);
-    insertion_sort(array_to_sort1, array_size);
+    selection_sort(array_to_sort1, array_size);
     print_array(array_to_sort1, array_size);
 
     std::sort(array_to_sort_orig, array_to_sort_orig+array_size);
