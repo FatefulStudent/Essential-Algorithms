@@ -2,7 +2,17 @@
 #include <iostream>
 #include <algorithm>
 
-int find_min_index(int * start_ptr, int * end_ptr)
+
+void print_array(int * array, size_t array_size)
+{
+    std::cout << "Array with size " << array_size << std::endl;
+    for (size_t i = 0; i < array_size; i++)
+        std::cout << array[i] << " ";
+
+    std::cout << std::endl;
+}
+
+int find_min_index(int * start_ptr, int * end_ptr, bool first_min)
 {
     int min_index = 0;
     int index_counter = 1;
@@ -14,6 +24,7 @@ int find_min_index(int * start_ptr, int * end_ptr)
         {
             min_element = *i;
             min_index = index_counter;
+            break;
         }
     }
 
@@ -23,37 +34,36 @@ int find_min_index(int * start_ptr, int * end_ptr)
 void insertion_sort(int* array, size_t size)
 {
     int min_index = 0;
+    int insert_index = 0;
 
     for (size_t i = 0; i < size; i++)
     {
-        min_index = find_min_index(array + i, array + size);
-        // std:: cout << "element #" << i << std::endl;
-        // std:: cout << "min_index at " << i+min_index << std::endl;
+        min_index = find_min_index(array + i, array + size, true);
         if (min_index)
         {
-            for (size_t j = i + min_index; j > i; j--)
-            {
-                // std:: cout << "exchanging indexes " << j << ", " << j-1 << std::endl;
-                std::swap(array[j-1], array[j]);
-            }
             
+            // finding appropriate place
+            insert_index = 0;
+            while (array[i+min_index] > array[insert_index])
+                insert_index++;
+
+            // swapping the elements
+            for (size_t j = i + min_index; j > insert_index; j--)
+                std::swap(array[j-1], array[j]);
         }
     }
 }
 
-
-void print_array(int * array, size_t array_size)
+void selection_sort(int* array, size_t size)
 {
-    std::cout << "Array with size " << array_size << std::endl;
-    for (size_t i = 0; i < array_size; i++)
-        std::cout << array[i] << " ";
 
-    std::cout << std::endl;
 }
+
+
 
 int main()
 {
-    size_t array_size = 10; 
+    size_t array_size = 7; 
     int * array_to_sort1 = new int[array_size];
     int * array_to_sort_orig = new int[array_size];
     for (size_t i = 0; i < array_size; i++)
@@ -69,7 +79,5 @@ int main()
     std::sort(array_to_sort_orig, array_to_sort_orig+array_size);
     print_array(array_to_sort_orig, array_size);
 
-    // std::cout << *find_min_element(array_to_sort + 3, 
-    //                                array_to_sort + array_size);
 
 }
