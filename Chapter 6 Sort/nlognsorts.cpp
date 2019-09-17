@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <algorithm>
-
+#include <vector>
 
 void print_array(int * array, size_t array_size)
 {
@@ -36,7 +36,8 @@ void make_heap(int * array, size_t size)
     }
 }
 
-
+// removing maximum element from heap and 
+// restoring its quality
 int remove_top_heap(int* array, int size)
 {
     int result = array[0];
@@ -69,7 +70,8 @@ int remove_top_heap(int* array, int size)
     return result;
 }
 
-
+// making a heap then iteratively removing max elements
+// and putting it ot the right of array
 void heap_sort(int* array, size_t size)
 {
     int max_element = 0;
@@ -85,9 +87,50 @@ void heap_sort(int* array, size_t size)
     }
 }
 
+void quick_sort(int* array, size_t size)
+{
+    if (size == 0 || size == 1)
+        return;
+    int middle_index = rand() % size;
+    int middle = array[middle_index];
+
+    std::vector<int> lesser_elements;
+    std::vector<int> bigger_elements;
+    
+    for (size_t i = 0; i < size; i++)
+    {
+        if (i == middle_index)
+            continue;
+
+        if (array[i] > middle)
+            bigger_elements.push_back(array[i]);
+        else
+            lesser_elements.push_back(array[i]);
+    }
+
+    size_t array_index = 0;
+    for (size_t j = 0; j < lesser_elements.size(); j++, array_index++)
+    {
+        array[array_index] = lesser_elements[j];
+    }
+        
+    
+    array[array_index] = middle;
+    middle_index = array_index;
+    array_index += 1;
+
+    for (size_t j = 0; j < bigger_elements.size(); j++, array_index++)
+    {
+        array[array_index] = bigger_elements[j];
+    }
+        
+    quick_sort(array, middle_index);
+    quick_sort(array+middle_index, size-middle_index);
+}
+
 int main()
 {
-    size_t array_size = 7; 
+    size_t array_size = 10; 
     int * array_to_sort1 = new int[array_size];
     int * array_to_sort_orig = new int[array_size];
     for (size_t i = 0; i < array_size; i++)
@@ -98,8 +141,8 @@ int main()
     }
     print_array(array_to_sort1, array_size);
 
-    std::cout << "heap sort:" << std:: endl;
-    heap_sort(array_to_sort1, array_size);
+    std::cout << "quick sort:" << std:: endl;
+    quick_sort(array_to_sort1, array_size);
     print_array(array_to_sort1, array_size);
 
     std::cout << "sorted array:" << std:: endl;
