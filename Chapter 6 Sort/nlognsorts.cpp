@@ -89,7 +89,7 @@ void heap_sort(int* array, size_t size)
 
 void quick_sort(int* array, size_t size)
 {
-    if (size == 0 || size == 1)
+    if (size <= 1)
         return;
     int middle_index = rand() % size;
     int middle = array[middle_index];
@@ -128,9 +128,53 @@ void quick_sort(int* array, size_t size)
     quick_sort(array+middle_index, size-middle_index);
 }
 
+void merge_sort(int* array, size_t size)
+{
+    if (size <= 1)
+        return;
+
+    int middle_index = size/2;
+    merge_sort(array, middle_index);
+    merge_sort(array+middle_index, size-middle_index);
+
+    // perform merging
+    int * merged_array = new int(size);
+    int left_index = 0;
+    int right_index = middle_index;
+    int array_index = 0;
+    while (left_index < middle_index && right_index < size)
+    {
+        if (array[left_index] < array[right_index])
+        {
+            merged_array[array_index] = array[left_index];
+            left_index++;
+        } else {
+            merged_array[array_index] = array[right_index];
+            right_index++;
+        } 
+        array_index++;
+    }
+
+    
+    for (; left_index < middle_index; left_index++, array_index++)
+    {
+        merged_array[array_index] = array[left_index];
+    }
+
+    for (; right_index < size; right_index++, array_index++)
+    {
+        merged_array[array_index] = array[right_index];
+    }
+
+    for (size_t i = 0; i < size; i++)
+    {
+        array[i] = merged_array[i];
+    }
+}
+
 int main()
 {
-    size_t array_size = 10; 
+    size_t array_size = 12; 
     int * array_to_sort1 = new int[array_size];
     int * array_to_sort_orig = new int[array_size];
     for (size_t i = 0; i < array_size; i++)
@@ -141,8 +185,8 @@ int main()
     }
     print_array(array_to_sort1, array_size);
 
-    std::cout << "quick sort:" << std:: endl;
-    quick_sort(array_to_sort1, array_size);
+    std::cout << "merge sort:" << std:: endl;
+    merge_sort(array_to_sort1, array_size);
     print_array(array_to_sort1, array_size);
 
     std::cout << "sorted array:" << std:: endl;
