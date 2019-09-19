@@ -56,6 +56,7 @@ int interpolation_search(int * array, int size, int target)
         }
 
     }
+    return -1;
 }
 
 int main()
