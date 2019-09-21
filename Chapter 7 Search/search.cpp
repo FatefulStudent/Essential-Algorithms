@@ -36,6 +36,31 @@ int binary_search(int * array, int size, int target)
     return -1;
 }
 
+int binary_search_recursive(int * array, int size, int target)
+{
+    int min_idx = 0;
+    int max_idx = size-1;
+    int mid_idx = (min_idx+max_idx)/2;
+
+    if (array[0] == target)
+        return 0;
+    if (min_idx > max_idx)
+        return -1;
+
+    if (target > array[mid_idx])
+    {
+        min_idx = mid_idx+1;
+        return mid_idx+1+binary_search_recursive(array+min_idx, size-min_idx, target);
+    } else if (target < array[mid_idx]) {
+        max_idx = mid_idx-1;
+        return binary_search_recursive(array, max_idx, target);
+    } else {
+        return mid_idx;
+    }
+
+    return -1;
+}
+
 int interpolation_search(int * array, int size, int target)
 {
     int min_idx = 0;
@@ -61,9 +86,11 @@ int interpolation_search(int * array, int size, int target)
 
 int main()
 {
-    int my_arr[5] = {1, 2, 3, 4, 5};
+    int size = 11;
+    int target = 1;
+    int my_arr[11] = {1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 13};
 
-    cout << linear_search(my_arr, 5, 4) << endl;
+    cout << linear_search(my_arr, size, target) << endl;
 
-    cout << interpolation_search(my_arr, 5, 4) << endl;
+    cout << binary_search_recursive(my_arr, size, target) << endl;
 }
