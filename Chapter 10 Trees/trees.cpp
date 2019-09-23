@@ -8,14 +8,34 @@ using std::cout;
 class BinaryTreeNode
 {
 public:
-    BinaryTreeNode(char const * name): name(name), left_child(0), right_child(0)
+    BinaryTreeNode(int value): value(value), left_child(0), right_child(0)
     {}
+    
     friend std::ostream& operator<<(std::ostream& is, BinaryTreeNode& node)
     {
-        is << node.name;
+        is << node.value;
         return is;
     }
-    char const * name;
+
+    void add_node(int new_value)
+    {
+        if (new_value < value)
+        {
+            if (left_child == 0)
+                left_child = new BinaryTreeNode(new_value);
+            else
+                left_child->add_node(new_value);
+        } else {
+            if (right_child == 0)
+                right_child = new BinaryTreeNode(new_value);
+            else
+                right_child->add_node(new_value);
+        }
+            
+            
+    }
+
+    int value;
     BinaryTreeNode * left_child;
     BinaryTreeNode * right_child;
 };
@@ -25,12 +45,12 @@ class BinaryTree
 public:
     BinaryTree(BinaryTreeNode * root): root(root)
     {}
-    // обход в прямом порядке
     
 
     BinaryTreeNode * root; 
 };
 
+// обход в прямом порядке
 void traverse_preorder(BinaryTreeNode * node)
 {
     cout << *node << ", ";
@@ -43,6 +63,7 @@ void traverse_preorder(BinaryTreeNode * node)
     return;
 }
 
+// обход в симметричном порядке
 void traverse_inorder(BinaryTreeNode * node)
 {
     if (node->left_child != 0)
@@ -54,6 +75,7 @@ void traverse_inorder(BinaryTreeNode * node)
     return;
 }
 
+// обход в обратном порядке
 void traverse_postorder(BinaryTreeNode * node)
 {
     if (node->left_child != 0)
@@ -92,32 +114,51 @@ void traverse_depth_first(BinaryTreeNode * first_node)
 
 int main()
 {
-    BinaryTreeNode root("D");
-    BinaryTreeNode node1("E");
-    BinaryTreeNode node2("B");
-    BinaryTreeNode node3("A");
-    BinaryTreeNode node5("C");
-    
-    root.left_child = &node2;
-    root.right_child = &node1;
-    
-    node2.left_child = &node3;
-    node2.right_child = &node5;
+    BinaryTreeNode root(5);
+    BinaryTreeNode node1(2);
+    BinaryTreeNode node2(6);
 
-    cout << "traverse_preorder" << endl;
-    traverse_preorder(&root);
-    cout << endl;
+    BinaryTreeNode node3(1);
+    BinaryTreeNode node4(4);
 
-    cout << "traverse_inorder" << endl;
-    traverse_inorder(&root);
-    cout << endl;
+    BinaryTreeNode node5(9);
     
-    cout << "traverse_postorder" << endl;
-    traverse_postorder(&root);
-    cout << endl;
+    
+    root.left_child = &node1;
+    root.right_child = &node2;
+
+    node1.left_child = &node3;
+    node1.right_child = &node4;
+    
+    node2.left_child = &node5;
+
+    
+
+    // cout << "traverse_preorder" << endl;
+    // traverse_preorder(&root);
+    // cout << endl;
+
+    // cout << "traverse_inorder" << endl;
+    // traverse_inorder(&root);
+    // cout << endl;
+    
+    // cout << "traverse_postorder" << endl;
+    // traverse_postorder(&root);
+    // cout << endl;
     
     cout << "traverse_depth_first" << endl;
     traverse_depth_first(&root);
+    cout << endl;
+
+    BinaryTreeNode new_node(5);
+    new_node.add_node(2);
+    new_node.add_node(6);
+    new_node.add_node(1);
+    new_node.add_node(4);
+    new_node.add_node(9);
+
+    cout << "traverse_depth_first" << endl;
+    traverse_depth_first(&new_node);
     cout << endl;
 
     return 0;
