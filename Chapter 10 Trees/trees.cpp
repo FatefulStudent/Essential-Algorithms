@@ -35,6 +35,25 @@ public:
             
     }
 
+    BinaryTreeNode * find_node(int target)
+    {
+        if (target == value)
+            return this;
+        
+        if (target < value)
+        {
+            if (left_child == 0)
+                return 0;
+            else
+                left_child->find_node(target);
+        } else {
+            if (right_child == 0)
+                return 0;
+            else
+                right_child->find_node(target);
+        }  
+    }
+
     int value;
     BinaryTreeNode * left_child;
     BinaryTreeNode * right_child;
@@ -159,6 +178,11 @@ int main()
 
     cout << "traverse_depth_first" << endl;
     traverse_depth_first(&new_node);
+    cout << endl;
+
+    cout << "find existing node " << new_node.find_node(4) << endl;
+    cout << "find nonexisting node " << new_node.find_node(3) << endl;
+    
     cout << endl;
 
     return 0;
