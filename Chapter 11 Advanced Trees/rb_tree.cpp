@@ -3,6 +3,8 @@
 using std::cout;
 using std::endl;
 
+enum COLOR {RED, BLACK};
+
 // 1. Every node either black or red
 // 2. Root is black
 // 3. Every leaf is black
@@ -15,7 +17,7 @@ struct rb_node
     rb_node * left_child;
     rb_node * right_child;
     int key;
-    bool is_black;
+    bool color;
 };
 
 struct rb_tree
@@ -115,10 +117,56 @@ void rb_insert(rb_tree* T, rb_node* z)
     
     z->left_child = T->nil;
     z->right_child = T->nil;
+    z->color = RED;
     rb_insert_fixup(T, z);
 }
 
 void rb_insert_fixup(rb_tree* T, rb_node* z)
 {
-
+    rb_node* uncle = 0;
+    while (z->parent != T->nil && z->parent->color == RED)
+    {
+        // if z's parent is a left child
+        if (z->parent == z->parent->parent->left_child)
+        {
+            uncle = z->parent->parent->right_child;
+            // CASE 1
+            if (uncle->color == RED)
+            {
+                z->parent->color = BLACK;
+                uncle->color = BLACK;
+                z->parent->parent->color = RED;
+                z = z->parent->parent;
+            }
+            // CASE 2 
+            else if (z == z->parent->right_child) 
+            {
+                z = z->parent;
+                left_rotate(T, z);
+            }
+            z->parent->color = BLACK;
+            z->parent->parent->color = RED;
+            right_rotate(T, z->parent->parent);
+        } else {
+            uncle = z->parent->parent->left_child;
+            // CASE 1
+            if (uncle->color == RED)
+            {
+                z->parent->color = BLACK;
+                uncle->color = BLACK;
+                z->parent->parent->color = RED;
+                z = z->parent->parent;
+            }
+            // CASE 2 
+            else if (z == z->parent->left_child) 
+            {
+                z = z->parent;
+                right_rotate(T, z);
+            }
+            z->parent->color = BLACK;
+            z->parent->parent->color = RED;
+            left_rotate(T, z->parent->parent);
+        }
+    }
+    
 }
