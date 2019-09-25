@@ -87,3 +87,38 @@ void right_rotate(rb_tree * T, rb_node* y)
     y->parent = x;
     x->right_child = y;
 }
+
+void rb_insert(rb_tree* T, rb_node* z)
+{
+    rb_node* x = T->root;
+    rb_node* y = T->nil;
+
+    // finding appropriate empty spot
+    while (x != T->nil)
+    {
+        // preserving parent
+        y = x; 
+
+        if (z->key > x->key)
+            x = x->right_child;
+        else
+            x = x->left_child;
+    }
+    z->parent = y;
+
+    if (y == T->nil)
+        T->root = y;
+    else if (z->key < y->key)
+        y->left_child = z;
+    else
+        y->right_child = z;
+    
+    z->left_child = T->nil;
+    z->right_child = T->nil;
+    rb_insert_fixup(T, z);
+}
+
+void rb_insert_fixup(rb_tree* T, rb_node* z)
+{
+
+}
