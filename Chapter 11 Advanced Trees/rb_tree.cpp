@@ -232,5 +232,74 @@ void rb_delete(rb_tree* T, rb_node* z)
 
 void rb_delete_fixup(rb_tree* T, rb_node* x)
 {
-    
+    rb_node* w = 0;
+    while (x != T->root && x->color == BLACK)
+    {
+        if (x == x->parent->left_child)
+        {
+            w = x->parent->right_child;
+            // CASE 1
+            if (w->color == RED)
+            {
+                w->color = BLACK;
+                x->parent->color = RED;
+                left_rotate(T, x->parent);
+                x = x->parent;
+            }
+
+            if (w->left_child->color == BLACK && 
+                    w->right_child->color == BLACK)
+            {
+                w->color = RED;
+                x = x->parent;
+            }
+            // CASE 2 
+            else 
+            {
+                if (w->right_child->color == BLACK) 
+                {
+                    w->left_child->color = BLACK;
+                    w->color = RED;
+                    right_rotate(T, w);
+                    w = x->parent->right_child;
+                }
+                w->color = x->parent->color;
+                x->parent->color = BLACK;
+                w->right_child->color = BLACK;
+                left_rotate(T, x->parent);
+            }
+        } else {
+            w = x->parent->left_child;
+            // CASE 1
+            if (w->color == RED)
+            {
+                w->color = BLACK;
+                x->parent->color = RED;
+                right_rotate(T, x->parent);
+                x = x->parent;
+            }
+
+            if (w->left_child->color == BLACK && 
+                    w->right_child->color == BLACK)
+            {
+                w->color = RED;
+                x = x->parent;
+            }
+            // CASE 2 
+            else 
+            {
+                if (w->left_child->color == BLACK) 
+                {
+                    w->right_child->color = BLACK;
+                    w->color = RED;
+                    left_rotate(T, w);
+                    w = x->parent->left_child;
+                }
+                w->color = x->parent->color;
+                x->parent->color = BLACK;
+                w->left_child->color = BLACK;
+                right_rotate(T, x->parent);
+            }
+        }
+    }
 }
