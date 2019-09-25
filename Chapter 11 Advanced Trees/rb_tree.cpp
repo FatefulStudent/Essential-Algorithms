@@ -156,17 +156,81 @@ void rb_insert_fixup(rb_tree* T, rb_node* z)
                 uncle->color = BLACK;
                 z->parent->parent->color = RED;
                 z = z->parent->parent;
+            } else { 
+                // CASE 2 
+                if (z == z->parent->left_child) 
+                {
+                    z = z->parent;
+                    right_rotate(T, z);
+                }
+                // CASE 3
+                z->parent->color = BLACK;
+                z->parent->parent->color = RED;
+                left_rotate(T, z->parent->parent);
             }
-            // CASE 2 
-            else if (z == z->parent->left_child) 
-            {
-                z = z->parent;
-                right_rotate(T, z);
-            }
-            z->parent->color = BLACK;
-            z->parent->parent->color = RED;
-            left_rotate(T, z->parent->parent);
         }
     }
+}
+
+void rb_transplant(rb_tree* T, rb_node* u, rb_node* v)
+{
+    if (u->parent == T->nil)
+        T->root = v;
+    else if (u == u->parent->left_child)
+        u->parent->left_child = v;
+    else
+        u->parent->right_child = v;
+    v->parent = u->parent;
+}
+
+rb_node* tree_minimum(rb_tree* T, rb_node* z)
+{
+    while(z->left_child != T->nil)
+        return tree_minimum(T, z->left_child);
+}
+
+void rb_delete(rb_tree* T, rb_node* z)
+{
+    rb_node* y = z;
+    rb_node* x = 0;
+    bool y_orig_color = y->color;
+
+    if (z->left_child == T->nil)
+    {
+        x = z->right_child;
+        rb_transplant(T, z, z->right_child);
+    }
+    else if (z->right_child == T->nil)
+    {
+        x = z->left_child;
+        rb_transplant(T, z, z->left_child);
+    }
+    else
+    {
+        y = tree_minimum(T, z->right_child);
+        y_orig_color = y->color;
+        x = y->right_child;
+        if (y->parent == z)
+        {
+            x->parent = y;
+        } 
+        else
+        {
+            rb_transplant(T, y, y->right_child);
+            y->right_child = z->right_child;
+            y->right_child->parent = y;
+        }
+        rb_transplant(T, z, y);
+        y->left_child = z->left_child;
+        y->left_child->parent = y;
+        y->color = z->color;
+    }
+
+    if (y_orig_color == BLACK)
+        rb_delete_fixup(T, x);
+}
+
+void rb_delete_fixup(rb_tree* T, rb_node* x)
+{
     
 }
